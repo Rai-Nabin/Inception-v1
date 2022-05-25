@@ -112,7 +112,7 @@ class InceptionBlock(Module):
 
 class AuxiliaryClassifier(Module):
     def __init__(self, in_channels, num_classes):
-        self(AuxiliaryClassifier, self).__init__()
+        super(AuxiliaryClassifier, self).__init__()
 
         self.pool = AvgPool2d(kernel_size=5, stride=3)
 
@@ -146,18 +146,18 @@ class ConvolutionBlock(Module):
 
         self.conv = Conv2d(in_channels=in_channels, out_channels=out_channels,
                            kernel_size=kernel_size, padding=padding, stride=stride)
-        self.batch_norm = BatchNorm2d(out_channels)
+
         self.relu = ReLU()
 
     def forward(self, x):
         out = self.conv(x)
-        out = self.batch_norm(out)
+
         out = self.relu(out)
 
         return out
 
 
 if __name__ == "__main__":
-    google_net = GoogleNet(aux_logits=False)
-    x = torch.randn(3, 3, 224, 224)
-    print(google_net(x).shape)
+    google_net = GoogleNet(aux_logits=True)
+    x = torch.randn(1, 3, 224, 224)
+    print(google_net(x)[0].shape)
